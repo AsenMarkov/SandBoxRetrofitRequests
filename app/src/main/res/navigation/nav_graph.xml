@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/unsplashPhotosFragment">
+
+    <fragment
+        android:id="@+id/unsplashPhotosFragment"
+        android:name="com.example.sandboxretrofitrequests.UnsplashPhotosFragment"
+        android:label="fragment_unsplash_photos"
+        tools:layout="@layout/fragment_unsplash_photos" >
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_selectedPhotosFragment"
+            app:destination="@id/selectedPhotosFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/selectedPhotosFragment"
+        android:name="com.example.sandboxretrofitrequests.SelectedPhotosFragment"
+        android:label="fragment_selected_photos"
+        tools:layout="@layout/fragment_selected_photos" >
+        <argument
+            android:name="photos"
+            app:argType="com.example.sandboxretrofitrequests.PhotoData[]" />
+    </fragment>
+</navigation>
