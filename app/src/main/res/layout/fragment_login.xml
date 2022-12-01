@@ -5,7 +5,7 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.LoginFragment">
+    tools:context=".LoginFragment">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/email_container"
@@ -71,7 +71,6 @@
         android:id="@+id/btn_login"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:backgroundTint="@drawable/btn_color_selector"
         android:clickable="false"
         android:enabled="false"
         android:text="@string/login"
@@ -79,6 +78,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/password_container" />
+    <!--        android:backgroundTint="@drawable/btn_color_selector"-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

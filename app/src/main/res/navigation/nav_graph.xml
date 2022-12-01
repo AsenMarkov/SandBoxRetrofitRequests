@@ -3,25 +3,58 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/unsplashPhotosFragment">
+    app:startDestination="@id/splashFragment">
 
     <fragment
         android:id="@+id/unsplashPhotosFragment"
         android:name="com.example.sandboxretrofitrequests.UnsplashPhotosFragment"
         android:label="fragment_unsplash_photos"
-        tools:layout="@layout/fragment_unsplash_photos" >
+        tools:layout="@layout/fragment_unsplash_photos">
         <action
             android:id="@+id/action_unsplashPhotosFragment_to_selectedPhotosFragment"
             app:destination="@id/selectedPhotosFragment" />
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/selectedPhotosFragment"
         android:name="com.example.sandboxretrofitrequests.SelectedPhotosFragment"
         android:label="fragment_selected_photos"
-        tools:layout="@layout/fragment_selected_photos" >
+        tools:layout="@layout/fragment_selected_photos">
         <argument
             android:name="photos"
             app:argType="com.example.sandboxretrofitrequests.PhotoData[]" />
+    </fragment>
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.example.sandboxretrofitrequests.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_loginFragment_to_unsplashPhotosFragment"
+            app:destination="@id/unsplashPhotosFragment" />
+        <argument
+            android:name="loggedState"
+            android:defaultValue="false"
+            app:argType="boolean" />
+    </fragment>
+    <fragment
+        android:id="@+id/splashFragment"
+        android:name="com.example.sandboxretrofitrequests.SplashFragment"
+        android:label="fragment_splash"
+        tools:layout="@layout/fragment_splash">
+        <action
+            android:id="@+id/action_splashFragment_to_loginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
+        <action
+            android:id="@+id/action_splashFragment_to_unsplashPhotosFragment"
+            app:destination="@id/unsplashPhotosFragment"
+            app:popUpTo="@id/splashFragment"
+            app:popUpToInclusive="true"/>
     </fragment>
 </navigation>

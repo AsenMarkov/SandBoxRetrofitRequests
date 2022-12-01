@@ -15,7 +15,7 @@ class PhotoAdapter(
 
     private lateinit var binding: UnsplashPhotoItemBinding
 
-    private var photoDataList: List<PhotoData>? = null
+    private var photoDataList: MutableList<PhotoData>? = null
 
     private var isEnable = false
     private var listOfSelectedImages = mutableListOf<PhotoData>()
@@ -101,22 +101,36 @@ class PhotoAdapter(
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun updateList(photoDataList: List<PhotoData>, oldCount: Int, photoDataListSize: Int) {
-        this.photoDataList = photoDataList
-        notifyDataSetChanged()
-        notifyItemRangeChanged(oldCount, photoDataListSize)
+    fun setNewPhoto(
+        photos: MutableList<PhotoData>,
+        updatedPhotosList: MutableList<PhotoData>,
+        oldCount: Int,
+        photoDataListSize: Int
+    ) {
+        if (photoDataList == null) {
+            photoDataList = photos
+            notifyDataSetChanged()
+        } else {
+            photoDataList = updatedPhotosList
+            notifyDataSetChanged()
+            notifyItemRangeChanged(oldCount, photoDataListSize)
+        }
     }
 
-    fun setNewPhoto(photo: List<PhotoData>) {
-        photoDataList = photo
+    fun clearAllPhotos() {
+        photoDataList?.clear()
+        listOfSelectedImages.clear()
+        isEnable = false
+        notifyDataSetChanged()
     }
 
     fun deleteSelected() {
-        val newPhotoList = photoDataList?.toMutableList()
+        val newPhotoList = photoDataList
         newPhotoList?.removeAll { item -> item.selected }
-        photoDataList = newPhotoList?.toList()
+        photoDataList = newPhotoList
         isEnable = false
         listOfSelectedImages.clear()
+        notifyDataSetChanged()
     }
 
     fun getClickedPhoto(): List<PhotoData> {

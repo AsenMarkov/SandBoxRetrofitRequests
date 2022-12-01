@@ -2,9 +2,10 @@ package com.example.sandboxretrofitrequests
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.core.view.isVisible
 import com.example.sandboxretrofitrequests.databinding.ActivityMainBinding
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), BaseFragment.ActivityActions {
 
 
     private lateinit var binding: ActivityMainBinding
@@ -13,5 +14,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+    }
+
+    override fun showProgressBar(show: Boolean) {
+        binding.progressBar.isVisible = show
     }
 }

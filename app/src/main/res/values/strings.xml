@@ -2,4 +2,8 @@
     <string name="app_name">SandBoxRetrofitRequests</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="Required">required</string>
+    <string name="e_mail">e_mail</string>
+    <string name="password">password</string>
+    <string name="login">login</string>
 </resources>
