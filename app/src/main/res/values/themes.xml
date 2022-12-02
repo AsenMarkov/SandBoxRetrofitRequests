@@ -14,7 +14,13 @@
         <!-- Customize your theme here. -->
     </style>
 
-    <style name="Theme.SandBoxRetrofitRequests.CenterAnimation">
-        <item name="android:windowBackground">@drawable/ic_baseline_wc_24</item>
+    <style name="SplashScreen" parent="Theme.AppCompat.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/cold_start_screen</item>
+        <item name="android:statusBarColor">@color/green</item>
     </style>
+
+    <!--    <style name="SplashScreen">-->
+    <!--        <item name="android:windowBackground">@drawable/cold_start_screen</item>-->
+    <!--    </style>-->
+
 </resources>

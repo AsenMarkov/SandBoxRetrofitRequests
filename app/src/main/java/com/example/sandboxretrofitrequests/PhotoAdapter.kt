@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.sandboxretrofitrequests.databinding.UnsplashPhotoItemBinding
 
+@SuppressLint("NotifyDataSetChanged")
 class PhotoAdapter(
     private val listener: OnPhotoClickedListener, private val showDeleteMenu: (Boolean) -> Unit
 ) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
@@ -33,7 +34,7 @@ class PhotoAdapter(
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
 
         val currentPhoto = photoDataList?.get(position)
-        holder.check.visibility = View.GONE
+        holder.backGroundSelected.visibility = View.GONE
 
         holder.bind(currentPhoto!!)
     }
@@ -41,7 +42,7 @@ class PhotoAdapter(
     inner class PhotoViewHolder(private val binding: UnsplashPhotoItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        val check: ImageView = binding.selectedBackground
+        val backGroundSelected: ImageView = binding.selectedBackground
 
         init {
             binding.imageView.setOnClickListener {
@@ -88,7 +89,7 @@ class PhotoAdapter(
         }
 
         fun bind(photo: PhotoData) {
-            check.visibility =
+            backGroundSelected.visibility =
                 if (photo.selected) View.VISIBLE else View.GONE // checks if the image is selected or not when recreating it while scrolling
             binding.apply {
                 Glide.with(imageView)
@@ -100,25 +101,30 @@ class PhotoAdapter(
         }
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun setNewPhoto(
-        photos: MutableList<PhotoData>,
         updatedPhotosList: MutableList<PhotoData>,
         oldCount: Int,
         photoDataListSize: Int
     ) {
-        if (photoDataList == null) {
-            photoDataList = photos
-            notifyDataSetChanged()
-        } else {
-            photoDataList = updatedPhotosList
-            notifyDataSetChanged()
-            notifyItemRangeChanged(oldCount, photoDataListSize)
-        }
+        photoDataList = updatedPhotosList
+        notifyDataSetChanged()
+        notifyItemRangeChanged(oldCount, photoDataListSize)
     }
 
     fun clearAllPhotos() {
         photoDataList?.clear()
+        listOfSelectedImages.clear()
+        isEnable = false
+        notifyDataSetChanged()
+    }
+
+    fun clearSelectedPhotos() {
+//        listOfSelectedImages.forEach { selected ->
+//            photoDataList?.find { it.id == selected.id }?.selected = false
+//        }
+        photoDataList?.forEach {
+            it.selected = false
+        }
         listOfSelectedImages.clear()
         isEnable = false
         notifyDataSetChanged()

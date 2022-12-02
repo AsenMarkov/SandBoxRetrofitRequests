@@ -4,12 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SplashFragment">
+    tools:context=".SplashFragment"
+    android:background="@color/green"
+    >
 
     <ImageView
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:src="@drawable/ic_baseline_wc_24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/cold_start_screen"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

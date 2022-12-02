@@ -12,6 +12,7 @@ class MainActivity : AppCompatActivity(), BaseFragment.ActivityActions {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_SandBoxRetrofitRequests) // Set the theme back to Normal
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
     }

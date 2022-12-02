@@ -12,7 +12,6 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sandboxretrofitrequests.databinding.FragmentUnsplashPhotosBinding
@@ -21,8 +20,12 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 @Suppress("DEPRECATION")
+@SuppressLint("NotifyDataSetChanged")
+
 class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListener, Transfer,
     BaseFragment.ActivityActions {
+
+    var rememberScrollPosition = 0
 
     private var mainMenu: Menu? = null
     private lateinit var binding: FragmentUnsplashPhotosBinding
@@ -39,6 +42,17 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
         binding = FragmentUnsplashPhotosBinding.inflate(layoutInflater)
+    }
+
+    override fun onPause() {
+        rememberScrollPosition = currentLayoutManager.findFirstCompletelyVisibleItemPosition()
+        super.onPause()
+    }
+
+    override fun onResume() {
+        currentLayoutManager.scrollToPosition(rememberScrollPosition)
+        photoAdapter.clearSelectedPhotos()
+        super.onResume()
     }
 
     @Deprecated("Deprecated in Java")
@@ -76,7 +90,6 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
         return binding.root
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         photoAdapter = PhotoAdapter(this) { show -> showDeleteMenu(show) }
@@ -109,7 +122,6 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                                     val oldCount = updatedPhotosList.size
                                     updatedPhotosList.addAll(photos)
                                     photoAdapter.setNewPhoto(
-                                        photos,
                                         updatedPhotosList,
                                         oldCount,
                                         updatedPhotosList.size,
@@ -123,7 +135,6 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                                     .show()
                             }
                             showProgressBar(false)
-                            currentPage++
                         }
                     }
                 }
@@ -144,6 +155,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                 if (dy > 0) {
                     if (lastVisibleItemPosition + 1 == totalItemCount) {
                         viewModel.fetchPhotos(currentPage)
+                        currentPage++
                     }
                 }
             }
@@ -153,6 +165,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
             currentPage = 1
             viewModel.fetchPhotos(currentPage)
             binding.container.isRefreshing = false
+            showDeleteMenu(false)
         }
     }
 
@@ -165,7 +178,6 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
         actions?.showProgressBar(show)
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun deleteSelected() {
         AlertDialog.Builder(context).setTitle("Delete")
             .setMessage("Do you want to delete the items?")

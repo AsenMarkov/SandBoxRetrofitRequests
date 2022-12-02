@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--    can add colors and customisation-->
+    <item android:drawable="@color/green" />
+    <item
+        android:drawable="@drawable/unsplashlogo"
+        android:gravity="center" />
+
+</layer-list>
