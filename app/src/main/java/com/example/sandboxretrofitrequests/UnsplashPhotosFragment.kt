@@ -7,6 +7,7 @@ import android.view.*
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,7 +26,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListener, Transfer,
     BaseFragment.ActivityActions {
 
-    var rememberScrollPosition = 0
+    private var rememberScrollPosition = 0
 
     private var mainMenu: Menu? = null
     private lateinit var binding: FragmentUnsplashPhotosBinding
@@ -46,12 +47,14 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
 
     override fun onPause() {
         rememberScrollPosition = currentLayoutManager.findFirstCompletelyVisibleItemPosition()
+        showHideBottomNavBar(false)
         super.onPause()
     }
 
     override fun onResume() {
         currentLayoutManager.scrollToPosition(rememberScrollPosition)
         photoAdapter.clearSelectedPhotos()
+        showHideBottomNavBar(true)
         super.onResume()
     }
 
@@ -61,7 +64,22 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
         inflater.inflate(R.menu.top_nav_bar, menu)
         showDeleteMenu(false)
         mainMenu?.findItem(R.id.logout)?.isVisible = true
-        super.onCreateOptionsMenu(menu, inflater)
+
+        val search = mainMenu?.findItem(R.id.appSearchBar)
+        val searchView = search?.actionView as SearchView
+        searchView.queryHint = "Search"
+
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                photoAdapter.filter.filter(query)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                photoAdapter.filter.filter(newText)
+                return false
+            }
+        })
     }
 
     @Deprecated("Deprecated in Java")
@@ -116,6 +134,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                             showProgressBar(true)
                         }
                         is UnsplashPhotosViewModel.ScreenState.Success -> {
+                            showProgressBar(false)
                             val photos = it.success
                             if (photos.isNotEmpty()) {
                                 photos.let {
@@ -134,7 +153,6 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                                 Toast.makeText(context, "Something Went Wrong", Toast.LENGTH_SHORT)
                                     .show()
                             }
-                            showProgressBar(false)
                         }
                     }
                 }
@@ -172,10 +190,15 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
     private fun showDeleteMenu(show: Boolean) {
         mainMenu?.findItem(R.id.delete_selected)?.isVisible = show
         mainMenu?.findItem(R.id.open_selected)?.isVisible = show
+        mainMenu?.findItem(R.id.appSearchBar)?.isVisible = !show
     }
 
     override fun showProgressBar(show: Boolean) {
         actions?.showProgressBar(show)
+    }
+
+    override fun showHideBottomNavBar(show: Boolean) {
+        actions?.showHideBottomNavBar(show)
     }
 
     override fun deleteSelected() {

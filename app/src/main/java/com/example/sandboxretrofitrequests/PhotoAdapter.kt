@@ -4,18 +4,22 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Filter
+import android.widget.Filterable
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.example.sandboxretrofitrequests.databinding.UnsplashPhotoItemBinding
 
 @SuppressLint("NotifyDataSetChanged")
 class PhotoAdapter(
     private val listener: OnPhotoClickedListener, private val showDeleteMenu: (Boolean) -> Unit
-) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
+) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>(), Filterable {
 
     private lateinit var binding: UnsplashPhotoItemBinding
 
+    private var photoDataListFiltered: MutableList<PhotoData>? = null
     private var photoDataList: MutableList<PhotoData>? = null
 
     private var isEnable = false
@@ -33,7 +37,7 @@ class PhotoAdapter(
 
     override fun onBindViewHolder(holder: PhotoViewHolder, position: Int) {
 
-        val currentPhoto = photoDataList?.get(position)
+        val currentPhoto = photoDataListFiltered?.get(position)
         holder.backGroundSelected.visibility = View.GONE
 
         holder.bind(currentPhoto!!)
@@ -46,7 +50,7 @@ class PhotoAdapter(
 
         init {
             binding.imageView.setOnClickListener {
-                val item = photoDataList?.get(adapterPosition)
+                val item = photoDataListFiltered?.get(adapterPosition)
 
                 item?.let {
                     if (isEnable && itemsCount > 0) {
@@ -71,7 +75,7 @@ class PhotoAdapter(
                 }
             }
             binding.imageView.setOnLongClickListener {
-                photoDataList?.get(adapterPosition)?.let {
+                photoDataListFiltered?.get(adapterPosition)?.let {
                     isEnable = true
                     if (!listOfSelectedImages.contains(it)) {
                         listOfSelectedImages.add(it)
@@ -95,6 +99,7 @@ class PhotoAdapter(
                 Glide.with(imageView)
                     .load(photo.urls.regular)
                     .centerCrop()
+                    .transition(DrawableTransitionOptions.withCrossFade())
                     .into(imageView)
                 binding.userTextView.text = photo.user.name
             }
@@ -107,22 +112,20 @@ class PhotoAdapter(
         photoDataListSize: Int
     ) {
         photoDataList = updatedPhotosList
+        photoDataListFiltered = photoDataList
         notifyDataSetChanged()
         notifyItemRangeChanged(oldCount, photoDataListSize)
     }
 
     fun clearAllPhotos() {
-        photoDataList?.clear()
+        photoDataListFiltered?.clear()
         listOfSelectedImages.clear()
         isEnable = false
         notifyDataSetChanged()
     }
 
     fun clearSelectedPhotos() {
-//        listOfSelectedImages.forEach { selected ->
-//            photoDataList?.find { it.id == selected.id }?.selected = false
-//        }
-        photoDataList?.forEach {
+        photoDataListFiltered?.forEach {
             it.selected = false
         }
         listOfSelectedImages.clear()
@@ -131,9 +134,9 @@ class PhotoAdapter(
     }
 
     fun deleteSelected() {
-        val newPhotoList = photoDataList
+        val newPhotoList = photoDataListFiltered
         newPhotoList?.removeAll { item -> item.selected }
-        photoDataList = newPhotoList
+        photoDataListFiltered = newPhotoList
         isEnable = false
         listOfSelectedImages.clear()
         notifyDataSetChanged()
@@ -143,12 +146,36 @@ class PhotoAdapter(
         return listOfSelectedImages
     }
 
-    override fun getItemCount(): Int {
-        return photoDataList?.size ?: 0
-    }
+    override fun getItemCount(): Int = photoDataListFiltered?.size ?: 0
+
 
     interface OnPhotoClickedListener {
         fun onClickedPhoto()
         fun editorModeOn(enabled: Boolean)
+    }
+
+    override fun getFilter(): Filter {
+        return object : Filter() {
+            override fun performFiltering(constraint: CharSequence?): FilterResults {
+                photoDataListFiltered = if (constraint.toString().isEmpty()) {
+                    photoDataList
+                } else {
+                    val filteredList = mutableListOf<PhotoData>()
+
+                    photoDataList?.filter {
+                        it.urls.regular.contains(constraint!!)
+                    }?.forEach { filteredList.add(it) }
+                    filteredList
+                }
+                return FilterResults().apply { values = photoDataListFiltered }
+            }
+
+            @Suppress("UNCHECKED_CAST")
+            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+                photoDataListFiltered =
+                    if (results?.values == null) mutableListOf() else results.values as MutableList<PhotoData>
+                notifyDataSetChanged()
+            }
+        }
     }
 }

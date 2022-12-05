@@ -19,5 +19,6 @@ abstract class BaseFragment : Fragment() {
 
     interface ActivityActions {
         fun showProgressBar(show: Boolean)
+        fun showHideBottomNavBar(show: Boolean)
     }
 }
