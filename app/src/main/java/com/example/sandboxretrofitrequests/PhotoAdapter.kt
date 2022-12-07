@@ -4,8 +4,6 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Filter
-import android.widget.Filterable
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -15,7 +13,7 @@ import com.example.sandboxretrofitrequests.databinding.UnsplashPhotoItemBinding
 @SuppressLint("NotifyDataSetChanged")
 class PhotoAdapter(
     private val listener: OnPhotoClickedListener, private val showDeleteMenu: (Boolean) -> Unit
-) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>(), Filterable {
+) : RecyclerView.Adapter<PhotoAdapter.PhotoViewHolder>() {
 
     private lateinit var binding: UnsplashPhotoItemBinding
 
@@ -153,29 +151,26 @@ class PhotoAdapter(
         fun onClickedPhoto()
         fun editorModeOn(enabled: Boolean)
     }
-
-    override fun getFilter(): Filter {
-        return object : Filter() {
-            override fun performFiltering(constraint: CharSequence?): FilterResults {
-                photoDataListFiltered = if (constraint.toString().isEmpty()) {
-                    photoDataList
-                } else {
-                    val filteredList = mutableListOf<PhotoData>()
-
-                    photoDataList?.filter {
-                        it.urls.regular.contains(constraint!!)
-                    }?.forEach { filteredList.add(it) }
-                    filteredList
-                }
-                return FilterResults().apply { values = photoDataListFiltered }
-            }
-
-            @Suppress("UNCHECKED_CAST")
-            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
-                photoDataListFiltered =
-                    if (results?.values == null) mutableListOf() else results.values as MutableList<PhotoData>
-                notifyDataSetChanged()
-            }
-        }
-    }
 }
+
+//    override fun getFilter(): Filter {
+//        return object : Filter() {
+//            override fun performFiltering(constraint: CharSequence?): FilterResults {
+//                photoDataListFiltered = if (constraint.toString().isEmpty()) {
+//                    photoDataList
+//                } else {
+//                    val filteredList = mutableListOf<PhotoData>()
+//
+//                    photoDataList?.filter {
+//                        it.urls.regular.contains(constraint!!)
+//                    }?.forEach { filteredList.add(it) }
+//                    filteredList
+//                }
+//                return FilterResults().apply { values = photoDataListFiltered }
+//            }
+
+//            override fun publishResults(constraint: CharSequence?, results: FilterResults?) {
+//                photoDataListFiltered =
+//                    if (results?.values == null) mutableListOf() else results.values as MutableList<PhotoData>
+//                notifyDataSetChanged()
+//            }

@@ -7,6 +7,7 @@ import android.view.*
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
+import android.view.MenuItem.OnActionExpandListener
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -37,7 +38,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
 
 
     private lateinit var updatedPhotosList: ArrayList<PhotoData>
-    private var currentPage = 1
+    private var searchFor: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,13 +71,36 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
         searchView.queryHint = "Search"
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+
             override fun onQueryTextSubmit(query: String?): Boolean {
-                photoAdapter.filter.filter(query)
+                photoAdapter.clearAllPhotos()
+                searchFor = query!!
+                viewModel.getSearchedPhotos(searchFor)
                 return false
             }
 
             override fun onQueryTextChange(newText: String?): Boolean {
-                photoAdapter.filter.filter(newText)
+                photoAdapter.clearAllPhotos()
+                searchFor = newText!!
+                viewModel.getSearchedPhotos(searchFor)
+                return false
+            }
+        })
+
+//        search.setOnActionExpandListener(object : OnActionExpandListener {
+//            override fun onMenuItemActionExpand(p0: MenuItem?): Boolean {
+//                return false
+//            }
+//
+//            override fun onMenuItemActionCollapse(p0: MenuItem?): Boolean {
+//                viewModel.getInitialPhotos()
+//                return true
+//            }
+//        })
+
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
+            override fun onClose(): Boolean {
+                viewModel.getInitialPhotos()
                 return false
             }
         })
@@ -114,7 +138,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
 
         binding.recyclerView.adapter = photoAdapter
 
-        viewModel.fetchPhotos(currentPage)
+        viewModel.getInitialPhotos()
 
         binding.recyclerView.apply {
             currentLayoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
@@ -131,11 +155,11 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                         is UnsplashPhotosViewModel.ScreenState.Error -> {
                         }
                         is UnsplashPhotosViewModel.ScreenState.Loading -> {
-                            showProgressBar(true)
+                            showProgressBar(true) // showing only on start
                         }
                         is UnsplashPhotosViewModel.ScreenState.Success -> {
                             showProgressBar(false)
-                            val photos = it.success
+                            val photos = it.photos
                             if (photos.isNotEmpty()) {
                                 photos.let {
                                     val oldCount = updatedPhotosList.size
@@ -146,7 +170,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                                         updatedPhotosList.size,
                                     )
                                 }
-                            } else if (it.success.isEmpty()) {
+                            } else if (it.photos.isEmpty()) {
                                 Toast.makeText(context, "Response is empty", Toast.LENGTH_SHORT)
                                     .show()
                             } else {
@@ -172,16 +196,24 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
 
                 if (dy > 0) {
                     if (lastVisibleItemPosition + 1 == totalItemCount) {
-                        viewModel.fetchPhotos(currentPage)
-                        currentPage++
+                        if (searchFor.isEmpty()) {
+                            viewModel.getInitialPhotos()
+                        } else {
+                            viewModel.getSearchedPhotos(searchFor)
+                        }
                     }
                 }
             }
         })
+
         binding.container.setOnRefreshListener {
             photoAdapter.clearAllPhotos()
-            currentPage = 1
-            viewModel.fetchPhotos(currentPage)
+            viewModel.firstPage()
+            if (searchFor.isEmpty()) {
+                viewModel.getInitialPhotos()
+            } else {
+                viewModel.getSearchedPhotos(searchFor)
+            }
             binding.container.isRefreshing = false
             showDeleteMenu(false)
         }

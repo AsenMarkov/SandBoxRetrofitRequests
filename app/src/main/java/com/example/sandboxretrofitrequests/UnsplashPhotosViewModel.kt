@@ -2,36 +2,60 @@ package com.example.sandboxretrofitrequests
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
-class UnsplashPhotosViewModel(private val useCase: UseCase) : ViewModel() {
+class UnsplashPhotosViewModel(
+    private val getDefaultPhotosUseCase: DefaultPhotosUseCase,
+    private val getSearchedPhotosUseCase: SearchedPhotosUseCase
+) : ViewModel() {
 
     sealed class ScreenState {
         object Loading : ScreenState()
-        class Success(val success: MutableList<PhotoData>) : ScreenState()
+        class Success(val photos: List<PhotoData>) : ScreenState()
         class Error(val error: String) : ScreenState()
     }
 
     private val _stateFlow = MutableStateFlow<ScreenState>(ScreenState.Loading)
     val stateFlow = _stateFlow.asStateFlow()
 
-    fun fetchPhotos(page: Int) {
+    private var searchJob: Job? = null
+    private var debouncePeriod: Long = 1000
+    private var currentPage = 0
+
+    fun firstPage(){
+        currentPage = 0
+    }
+
+    fun getInitialPhotos() {
+        currentPage++
         viewModelScope.launch {
-            viewModelScope.launch {
-                useCase(page, object : ServiceInterface.LoadPhotosCallback {
-                    override fun onSuccess(success: MutableList<PhotoData>) {
-                        _stateFlow.value = ScreenState.Success(success)
-                    }
+            getDefaultPhotosUseCase(currentPage).fold(
+                onSuccess = {
+                    _stateFlow.value = ScreenState.Success(it)
+                },
+                onFailure = {
+                    _stateFlow.value = ScreenState.Error(it.localizedMessage)
+                }
+            )
+        }
+    }
 
-                    override fun onError(error: String) {
-                        _stateFlow.value = ScreenState.Error(error)
-                    }
-                })
-
-
-            }
+    fun getSearchedPhotos(query: String) {
+        currentPage++
+        searchJob?.cancel()
+        searchJob = viewModelScope.launch {
+            delay(debouncePeriod)
+            getSearchedPhotosUseCase(query = query, page = currentPage).fold(
+                onSuccess = {
+                    _stateFlow.value = ScreenState.Success(it?.result ?: emptyList())
+                },
+                onFailure = {
+                    _stateFlow.value = ScreenState.Error(it.localizedMessage)
+                }
+            )
         }
     }
 }
