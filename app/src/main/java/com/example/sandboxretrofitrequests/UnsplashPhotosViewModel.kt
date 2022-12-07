@@ -25,11 +25,12 @@ class UnsplashPhotosViewModel(
     private var debouncePeriod: Long = 1000
     private var currentPage = 0
 
-    fun firstPage(){
+    fun firstPage() {
         currentPage = 0
     }
 
     fun getInitialPhotos() {
+        _stateFlow.value = ScreenState.Loading
         currentPage++
         viewModelScope.launch {
             getDefaultPhotosUseCase(currentPage).fold(
@@ -44,9 +45,10 @@ class UnsplashPhotosViewModel(
     }
 
     fun getSearchedPhotos(query: String) {
-        currentPage++
+        _stateFlow.value = ScreenState.Loading
         searchJob?.cancel()
         searchJob = viewModelScope.launch {
+            currentPage++
             delay(debouncePeriod)
             getSearchedPhotosUseCase(query = query, page = currentPage).fold(
                 onSuccess = {

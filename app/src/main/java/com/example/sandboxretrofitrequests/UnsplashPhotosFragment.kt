@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sandboxretrofitrequests.databinding.FragmentUnsplashPhotosBinding
 import kotlinx.android.synthetic.main.fragment_unsplash_photos.*
+import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
@@ -98,7 +99,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
 //            }
 //        })
 
-        searchView.setOnCloseListener(object : SearchView.OnCloseListener{
+        searchView.setOnCloseListener(object : SearchView.OnCloseListener {
             override fun onClose(): Boolean {
                 viewModel.getInitialPhotos()
                 return false
@@ -153,6 +154,7 @@ class UnsplashPhotosFragment : BaseFragment(), PhotoAdapter.OnPhotoClickedListen
                 viewModel.stateFlow.collect {
                     when (it) {
                         is UnsplashPhotosViewModel.ScreenState.Error -> {
+                            showProgressBar(false)
                         }
                         is UnsplashPhotosViewModel.ScreenState.Loading -> {
                             showProgressBar(true) // showing only on start
