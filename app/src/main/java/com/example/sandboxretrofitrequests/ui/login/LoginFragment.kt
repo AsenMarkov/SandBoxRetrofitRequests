@@ -1,4 +1,4 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.ui.login
 
 import android.app.AlertDialog
 import android.content.Context

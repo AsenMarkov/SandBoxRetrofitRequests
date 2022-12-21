@@ -1,5 +1,6 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.data
 
+import com.example.sandboxretrofitrequests.data.PhotoData
 import com.google.gson.annotations.SerializedName
 
 data class SearchPhotoData(

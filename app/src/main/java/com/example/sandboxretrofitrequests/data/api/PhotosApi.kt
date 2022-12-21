@@ -1,5 +1,7 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.data.api
 
+import com.example.sandboxretrofitrequests.data.SearchPhotoData
+import com.example.sandboxretrofitrequests.data.PhotoData
 import retrofit2.Response
 import retrofit2.http.*
 

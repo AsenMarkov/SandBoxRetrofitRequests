@@ -1,6 +1,12 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.di
 
 
+import com.example.sandboxretrofitrequests.domain.usecases.DefaultPhotosUseCase
+import com.example.sandboxretrofitrequests.data.api.PhotosApi
+import com.example.sandboxretrofitrequests.domain.unsplash.PhotosRepository
+import com.example.sandboxretrofitrequests.domain.unsplash.PhotosRepositoryImpl
+import com.example.sandboxretrofitrequests.domain.usecases.SearchedPhotosUseCase
+import com.example.sandboxretrofitrequests.ui.gallery.UnsplashPhotosViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit

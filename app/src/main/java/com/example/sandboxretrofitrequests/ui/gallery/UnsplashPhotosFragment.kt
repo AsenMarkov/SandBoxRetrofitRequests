@@ -1,4 +1,4 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.ui.gallery
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
@@ -7,7 +7,6 @@ import android.view.*
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import android.view.MenuItem.OnActionExpandListener
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.Lifecycle
@@ -16,9 +15,12 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sandboxretrofitrequests.BaseFragment
+import com.example.sandboxretrofitrequests.R
+import com.example.sandboxretrofitrequests.data.PhotoData
 import com.example.sandboxretrofitrequests.databinding.FragmentUnsplashPhotosBinding
+import com.example.sandboxretrofitrequests.domain.adapters.PhotoAdapter
 import kotlinx.android.synthetic.main.fragment_unsplash_photos.*
-import kotlinx.coroutines.flow.collectLatest
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
 

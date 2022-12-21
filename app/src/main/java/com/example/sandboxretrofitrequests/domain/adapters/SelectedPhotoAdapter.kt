@@ -1,9 +1,10 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.domain.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.sandboxretrofitrequests.data.PhotoData
 import com.example.sandboxretrofitrequests.databinding.FullscreenDisplayPhotoBinding
 
 class SelectedPhotoAdapter :

@@ -1,4 +1,8 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.domain.unsplash
+
+import com.example.sandboxretrofitrequests.data.SearchPhotoData
+import com.example.sandboxretrofitrequests.data.PhotoData
+import com.example.sandboxretrofitrequests.data.api.PhotosApi
 
 class PhotosRepositoryImpl(
     private val api: PhotosApi

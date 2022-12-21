@@ -7,31 +7,32 @@
 
     <fragment
         android:id="@+id/unsplashPhotosFragment"
-        android:name="com.example.sandboxretrofitrequests.UnsplashPhotosFragment"
+        android:name="com.example.sandboxretrofitrequests.ui.gallery.UnsplashPhotosFragment"
         android:label="fragment_unsplash_photos"
         tools:layout="@layout/fragment_unsplash_photos">
-        <action
-            android:id="@+id/action_unsplashPhotosFragment_to_selectedPhotosFragment"
-            app:destination="@id/selectedPhotosFragment" />
+
         <action
             android:id="@+id/action_unsplashPhotosFragment_to_loginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/unsplashPhotosFragment"
             app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_unsplashPhotosFragment_to_selectedPhotosFragment"
+            app:destination="@id/selectedPhotosFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/selectedPhotosFragment"
-        android:name="com.example.sandboxretrofitrequests.SelectedPhotosFragment"
+        android:name="com.example.sandboxretrofitrequests.ui.selectedphoto.SelectedPhotosFragment"
         android:label="fragment_selected_photos"
         tools:layout="@layout/fragment_selected_photos">
         <argument
             android:name="photos"
-            app:argType="com.example.sandboxretrofitrequests.PhotoData[]" />
+            app:argType="com.example.sandboxretrofitrequests.data.PhotoData[]" />
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.sandboxretrofitrequests.LoginFragment"
+        android:name="com.example.sandboxretrofitrequests.ui.login.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login">
 
@@ -47,7 +48,7 @@
     </fragment>
     <fragment
         android:id="@+id/splashFragment"
-        android:name="com.example.sandboxretrofitrequests.SplashFragment"
+        android:name="com.example.sandboxretrofitrequests.ui.splash.SplashFragment"
         android:label="fragment_splash"
         tools:layout="@layout/fragment_splash">
         <action
@@ -63,7 +64,7 @@
     </fragment>
     <fragment
         android:id="@+id/mockFragment"
-        android:name="com.example.sandboxretrofitrequests.MockFragment"
+        android:name="com.example.sandboxretrofitrequests.ui.mock.MockFragment"
         android:label="fragment_mock"
         tools:layout="@layout/fragment_mock">
 

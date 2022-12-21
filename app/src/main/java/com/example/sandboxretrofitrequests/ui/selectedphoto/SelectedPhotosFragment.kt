@@ -1,4 +1,4 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.ui.selectedphoto
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -10,6 +10,8 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.SnapHelper
+import com.example.sandboxretrofitrequests.data.PhotoData
+import com.example.sandboxretrofitrequests.domain.adapters.SelectedPhotoAdapter
 import com.example.sandboxretrofitrequests.databinding.FragmentSelectedPhotosBinding
 
 class SelectedPhotosFragment : Fragment() {

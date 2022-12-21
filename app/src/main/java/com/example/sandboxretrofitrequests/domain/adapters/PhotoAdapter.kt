@@ -1,4 +1,4 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.domain.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.example.sandboxretrofitrequests.data.PhotoData
 import com.example.sandboxretrofitrequests.databinding.UnsplashPhotoItemBinding
 
 @SuppressLint("NotifyDataSetChanged")

@@ -1,4 +1,7 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.domain.unsplash
+
+import com.example.sandboxretrofitrequests.data.SearchPhotoData
+import com.example.sandboxretrofitrequests.data.PhotoData
 
 interface PhotosRepository {
 

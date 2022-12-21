@@ -1,4 +1,4 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.ui.splash
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.fragment.findNavController
+import com.example.sandboxretrofitrequests.R
 import com.example.sandboxretrofitrequests.databinding.FragmentSplashBinding
 
 class SplashFragment : Fragment() {

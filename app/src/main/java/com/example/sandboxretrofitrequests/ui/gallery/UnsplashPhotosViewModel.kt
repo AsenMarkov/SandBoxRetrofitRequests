@@ -1,7 +1,10 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.ui.gallery
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.sandboxretrofitrequests.domain.usecases.DefaultPhotosUseCase
+import com.example.sandboxretrofitrequests.data.PhotoData
+import com.example.sandboxretrofitrequests.domain.usecases.SearchedPhotosUseCase
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*

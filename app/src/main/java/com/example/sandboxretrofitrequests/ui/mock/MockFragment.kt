@@ -1,9 +1,10 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.ui.mock
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.sandboxretrofitrequests.BaseFragment
 import com.example.sandboxretrofitrequests.databinding.FragmentMockBinding
 
 

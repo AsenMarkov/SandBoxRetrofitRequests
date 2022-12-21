@@ -1,4 +1,4 @@
-package com.example.sandboxretrofitrequests
+package com.example.sandboxretrofitrequests.di
 
 import android.app.Application
 import org.koin.android.ext.koin.androidContext
